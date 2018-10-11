@@ -6,32 +6,24 @@ namespace Task3
 {
     class Program
     {
-        static void ArrayWriteLine(int[] arr)
-        {
-            foreach (int element in arr)
-            {
-                Console.Write(element + "\0");
-            }
-        }
         static void Main(string[] args)
         {
-            int[] arr = new int[10];
-            int sum = 0;
-            Random rmd = new Random();
-            for (int i = 0; i < arr.Length; i++)
+            int starLevel;
+            string number;
+            do
             {
-                arr[i] = rmd.Next(15) - 5;
+                Console.Write("Input positive number ");
+                number = Console.ReadLine();
             }
-            Console.Write("Array: ");
-            ArrayWriteLine(arr);
-            foreach (int m in arr)
+            while (!(int.TryParse(number, out starLevel)) && starLevel < 0);
+            for (int i = 1; i < starLevel + 1; i++)
             {
-                if (m > 0)
-                {
-                    sum += m;
-                }
+                String sing = new string(' ', starLevel - i);
+                Console.Write(sing);
+                sing = new string('*', 1 + (i - 1) * 2);
+                Console.WriteLine(sing);
+
             }
-            Console.WriteLine("\nSum positive numbers: " + sum);
         }
     }
 }

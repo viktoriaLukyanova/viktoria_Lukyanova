@@ -2,30 +2,43 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace Task2_1
+namespace Task1
 {
     class Program
     {
-        static void ArrayWriteLine(int[] arr)
+        static public double Check(string number)
         {
-            foreach (int element in arr)
+            double res = -1;
+            double r = 0;
+            if ((double.TryParse(number, out r)) && r > 0)
             {
-                Console.Write(element+"\0");
+                return res = r;
+            }
+            else
+            {
+                Console.WriteLine("This isn't number or number is negative or equals zero");
+                return res;
             }
         }
         static void Main(string[] args)
         {
-            int[] arr = new int[15];
-            Random Rmd = new Random();            
-            for (int i = 0; i < arr.Length; i++)
+            double width = 0;
+            double hieght = 0;
+            do
             {
-                arr[i] = Rmd.Next(100);
+                Console.Write("Input width:");
+                string oneNumber = Console.ReadLine();
+                width = Check(oneNumber);
             }
-            Array.Sort(arr);
-            Console.Write("Sorted massive: ");
-            ArrayWriteLine(arr);
-            Console.WriteLine($"\nMin:{arr[0]} and Max: {arr[14]}");
-            Console.ReadKey();
+            while (width < 0);
+            do
+            {
+                Console.Write("Input hieght:");
+                string twoNumber = Console.ReadLine();
+                hieght = Check(twoNumber);
+            }
+            while (hieght < 0);
+            Console.WriteLine($"Square of rectangle is {width * hieght}");
         }
     }
 }

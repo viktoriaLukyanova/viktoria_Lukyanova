@@ -4,10 +4,10 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{C25D7821-0179-4B8D-9003-774C8FA1C24D}</ProjectGuid>
+    <ProjectGuid>{67F9B50D-FE0C-4502-BE5C-336F77951ECC}</ProjectGuid>
     <OutputType>Exe</OutputType>
-    <RootNamespace>Лукьянова_Вика_Task2</RootNamespace>
-    <AssemblyName>Лукьянова_Вика_Task2</AssemblyName>
+    <RootNamespace>Task1</RootNamespace>
+    <AssemblyName>Task1</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
