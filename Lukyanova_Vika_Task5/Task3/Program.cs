@@ -12,28 +12,31 @@ namespace Task3
             double b;
             double c;
             double per;
-            public string P(int a, int b, int c)
+            public Triangle(double a, double b, double c)
             {
-                if (!((a + b) < c || (a + c) < b || (b + c) < b))
+                setA = a;
+                setB = b;
+                setC = c;
+                if (!((a + b) < c || (a + c) < b || (b + c) < a))
                 {
-                    return (a + b + c).ToString();
+                    Console.WriteLine("P: " + P(a, b, c));
+                    Console.WriteLine("S: " + S(a, b, c, per));
+
                 }
                 else
                 {
-                    return "Такого треугольника не существует";
+                    Console.WriteLine("Ошибка: Такого треугольника не существует");
                 }
-
             }
-            public string S(int a, int b, int c)
+            public double P(double a, double b, double c)
             {
-                if (!((a + b) < c || (a + c) < b || (b + c) < b))
-                {
-                    per = Convert.ToDouble(P(a, b, c));
-                    return (Math.Sqrt(per * (per - a) * (per - b) * (per - c))).ToString();
-                }
-                return "Такого треугольника несуществует";
+                return per = (a + b + c);
             }
-            public int setA
+            public double S(double a, double b, double c, double per)
+            {
+                return Math.Sqrt(per * (per - a) * (per - b) * (per - c));
+            }
+            public double setA
             {
                 set
                 {
@@ -47,7 +50,7 @@ namespace Task3
                     }
                 }
             }
-            public int setB
+            public double setB
             {
                 set
                 {
@@ -62,7 +65,7 @@ namespace Task3
 
                 }
             }
-            public int setC
+            public double setC
             {
                 set
                 {
@@ -76,13 +79,12 @@ namespace Task3
                     }
                 }
             }
-
         }
         static void Main(string[] args)
         {
-            Triangle one = new Triangle();
-            Console.WriteLine(one.P(1, 1,1));
-            Console.WriteLine(one.S(1, 1,1));
+            Triangle one = new Triangle(1, 1, +-1);
+
+
         }
     }
 }

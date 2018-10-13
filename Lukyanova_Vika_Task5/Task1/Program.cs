@@ -12,7 +12,8 @@ namespace Task1
             public string lastName;
             public string patronymical;
             public int age;
-            DateTime birthday = new DateTime();
+            public DateTime birthday;
+            
             public string SetName
             {
                 get
@@ -31,17 +32,7 @@ namespace Task1
                     }
                 }
 
-            }
-            public int SetAge
-            {
-                set
-                {
-                    if (value > 0)
-                    {
-                        age = value;
-                    }
-                }
-            }
+            }            
             public string SetLastName
             {
                 set
@@ -67,17 +58,15 @@ namespace Task1
                     }
                     else
                     {
-                        SetPatronymical = value;
+                        patronymical = value;
                     }
-
                 }
-
             }
             public DateTime SetBirthday
             {
                 set
                 {
-                    if (value > DateTime.Now)
+                    if (value < DateTime.Now)
                     {
                         birthday = value;
                     }
@@ -87,13 +76,23 @@ namespace Task1
                     }
                 }
             }
+            public int GetAge
+            {
+                get
+                {                    
+                    return age = DateTime.Now.Year-birthday.Year;                    
+                }
+            }
+            
         }
-
-
         static void Main(string[] args)
         {
             User Pes = new User();
-            Pes.SetName = "Петя";
+           // Pes.SetName = "Петя";
+          //  DateTime date = new DateTime(2010,10,20);
+          //  Pes.SetBirthday=date;
+            Console.WriteLine(Pes.age);
+            
         }
     }
 }

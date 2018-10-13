@@ -27,7 +27,7 @@ namespace Task2
                     {
                         r = value;
                     }
-                    
+
                 }
             }
             public double GetArea
@@ -38,29 +38,11 @@ namespace Task2
                 }
             }
 
-            public double Length
-            {
-                get
-                {
-                    return 2 * Math.PI * r;
-                }
-            }
+            public double Length { get { return 2 * Math.PI * r; } }
 
-            public double X
-            {                
-                get
-                {
-                    return x;
-                }
-            }
+            public double X { get { return x; } }
 
-            public double Y
-            {
-                get
-                {
-                    return y;
-                }
-            }
+            public double Y { get { return y; } }
 
             static void Main(string[] args)
             {
