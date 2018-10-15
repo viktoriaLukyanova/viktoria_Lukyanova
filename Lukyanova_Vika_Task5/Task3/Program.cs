@@ -8,10 +8,10 @@ namespace Task3
     {
         class Triangle
         {
-            double a;
-            double b;
-            double c;
-            double per;
+            public double a;
+            public double b;
+            public double c;
+            public double per;
             public Triangle(double a, double b, double c)
             {
                 setA = a;
@@ -20,7 +20,7 @@ namespace Task3
                 if (!((a + b) < c || (a + c) < b || (b + c) < a))
                 {
                     Console.WriteLine("P: " + P(a, b, c));
-                    Console.WriteLine("S: " + S(a, b, c, per));
+                    Console.WriteLine("S: " + S(a, b, c));
 
                 }
                 else
@@ -32,7 +32,7 @@ namespace Task3
             {
                 return per = (a + b + c);
             }
-            public double S(double a, double b, double c, double per)
+            public double S(double a, double b, double c)
             {
                 return Math.Sqrt(per * (per - a) * (per - b) * (per - c));
             }
@@ -82,7 +82,11 @@ namespace Task3
         }
         static void Main(string[] args)
         {
-            Triangle one = new Triangle(1, 1, +-1);
+            Triangle one = new Triangle(1,1,1);                      
+            Console.WriteLine(one.c);
+
+
+
 
 
         }

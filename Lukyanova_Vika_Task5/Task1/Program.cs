@@ -13,53 +13,15 @@ namespace Task1
             public string patronymical;
             public int age;
             public DateTime birthday;
-            
-            public string SetName
+            public string Check(string str)
             {
-                get
+                if (string.IsNullOrEmpty(str) || int.TryParse(str, out int num))
                 {
-                    return name;
+                    throw new Exception("Некорректный формат");
                 }
-                set
+                else
                 {
-                    if (string.IsNullOrEmpty(value) || int.TryParse(value, out int num))
-                    {
-                        throw new Exception("Некорректный формат");
-                    }
-                    else
-                    {
-                        name = value;
-                    }
-                }
-
-            }            
-            public string SetLastName
-            {
-                set
-                {
-                    if (string.IsNullOrEmpty(value) || int.TryParse(value, out int num))
-                    {
-                        throw new Exception("Некорректный формат");
-                    }
-                    else
-                    {
-                        lastName = value;
-                    }
-
-                }
-            }
-            public string SetPatronymical
-            {
-                set
-                {
-                    if (string.IsNullOrEmpty(value) || int.TryParse(value, out int num))
-                    {
-                        throw new Exception("Некорректный формат");
-                    }
-                    else
-                    {
-                        patronymical = value;
-                    }
+                    return str;
                 }
             }
             public DateTime SetBirthday
@@ -79,20 +41,26 @@ namespace Task1
             public int GetAge
             {
                 get
-                {                    
-                    return age = DateTime.Now.Year-birthday.Year;                    
+                {
+                    age = (DateTime.Today.AddYears(-birthday.Year)).Year;
+                    if (DateTime.Today.DayOfYear <= birthday.DayOfYear)
+                    {
+                        age++;
+                    }
+                    return age;
                 }
             }
-            
+
         }
         static void Main(string[] args)
         {
             User Pes = new User();
-           // Pes.SetName = "Петя";
-          //  DateTime date = new DateTime(2010,10,20);
-          //  Pes.SetBirthday=date;
-            Console.WriteLine(Pes.age);
-            
+            DateTime date = new DateTime(1997, 9, 25);
+            Pes.birthday = date;
+            string name = "Петя";
+            Pes.Check(Pes.name = name);
+            Console.WriteLine(Pes.name + "\0" + Pes.GetAge);
+
         }
     }
 }
