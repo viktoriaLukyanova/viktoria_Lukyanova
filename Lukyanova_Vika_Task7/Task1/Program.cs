@@ -6,6 +6,7 @@ namespace Task1
 {
     class Program
     {
+
         abstract class Figuri
         {
             public abstract string Draw { get; }
@@ -73,7 +74,7 @@ namespace Task1
                 }
             }
         }
-        static void Main(string[] args)
+        static void Main(string[] args)           
         {
             Figuri[] arrF = new Figuri[4];
             for (int i = 0; i < arrF.Length; i++)
@@ -91,11 +92,11 @@ namespace Task1
                         break;
                     case 3:
                         arrF[i] = new Line(50);
-                        break;                    
+                        break;
                 }
             }
-            foreach(Figuri printF in arrF)
-            {                
+            foreach (Figuri printF in arrF)
+            {
                 Console.WriteLine(printF.Draw);
             }
         }
