@@ -11,6 +11,7 @@ using System.IO;
 
 namespace SystAnalys_lr1
 {
+
     public partial class Form1 : Form
     {
         DrawGraph G;
@@ -18,6 +19,9 @@ namespace SystAnalys_lr1
         List<Edge> E;
         int[,] AMatrix; //матрица смежности
         List <int> S = new List <int>();
+        List<int> Ex = new List<int>();
+        List<int> Rep = new List<int>();
+        public int n = 0;
 
         int selected1; //выбранные вершины, для соединения линиями
         int selected2;
@@ -144,6 +148,7 @@ namespace SystAnalys_lr1
             {
                 V.Add(new Vertex(e.X, e.Y));
                 G.drawVertex(e.X, e.Y, V.Count.ToString());
+                Ex.Add(V.Count);
                 sheet.Image = G.GetBitmap();
             }
             //нажата кнопка "рисовать ребро"
@@ -256,6 +261,114 @@ namespace SystAnalys_lr1
             }
         }
        
+        private void ExeptVLockMin()
+        {
+            AMatrix = new int[V.Count, V.Count];
+            G.fillAdjacencyMatrix(V.Count, E, AMatrix);
+            bool log = false;
+            for(int i=0; i<V.Count; i++)
+            {
+                if (log == true)
+                {
+                    i = 0;
+                }
+                int loc = 0;
+                for(int j=0; j<V.Count; j++)
+                {
+                    if (AMatrix[i,j] ==1)
+                    {
+                        loc++;
+                    }
+                }
+                if (loc < LockS.Value && loc!=0)
+                {
+                    S.Add(i+1);
+                    Ex.Remove(i + 1);
+                    for(int k=0; k<V.Count; k++)
+                    {
+                        AMatrix[i, k] = 0;
+                        AMatrix[k, i] = 0;                        
+                    }
+                    log = true;
+                }
+                else
+                {
+                    log = false;
+                }
+            }
+            for(int i=0; i<V.Count; i++)
+            {
+                for(int j=0; j<V.Count; j++)
+                {
+
+                }
+            }
+            if (Ex.Count == 0)
+            {
+                //завершино
+            }
+            else
+            {
+                for (int i = 0; i < Ex.Count; i++)
+                {
+                    string str = null;
+                    str += Ex[i].ToString();
+                }
+            }
+            
+        }
+
+        private bool CheckMatrZero (int[,] m)
+        {
+            foreach(int el in m)
+            {
+                if (el != 0)
+                {
+                    return false;
+                    break;
+                }
+            }
+            return true;
+        }
+        private void EMax(int[,] mat)
+        {
+            int max = 0;
+            int index = 0;
+            for (int i = 0; i < V.Count; i++)
+            {
+                if (!Rep.Contains(i))
+                {
+                    int loc = 0;
+                    for (int j = 0; j < V.Count; j++)
+                    {
+                        if (mat[i, j] == 1)
+                        {
+                            loc++;
+                        }
+                    }
+                    if (loc > max)
+                    {
+                        max = loc;
+                        index = i;
+                    }
+                }
+            }            
+                for(int j=0; j<V.Count; j++)
+                {
+                mat[index, j] = 0;
+                mat[j, index] = 0;
+                }           
+            
+            Rep.Add(index);
+            Ex.Remove(index);
+
+            while (CheckMatrZero(AMatrix) == false)
+            {
+                EMax(AMatrix);
+            }
+
+        }
+
         //создание матрицы смежности и вывод в листбокс
         private void createAdjAndOut()
         {
@@ -274,6 +387,7 @@ namespace SystAnalys_lr1
                 listBoxMatrix.Items.Add(sOut);
             }
         }
+        
 
         //О программе
         private void about_Click(object sender, EventArgs e)
@@ -304,6 +418,21 @@ namespace SystAnalys_lr1
                         MessageBoxButtons.OK, MessageBoxIcon.Error);
                     }
                 }
+            }
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+
+        }
+
+        private void btnDraw_Click(object sender, EventArgs e)
+        {
+            ExeptVLockMin();
+            listBoxMatrix.Items.Clear();
+            for (int i = 0; i < S.Count; i++)
+            {
+                listBoxMatrix.Items.Add(S[i]);
             }
         }
     }

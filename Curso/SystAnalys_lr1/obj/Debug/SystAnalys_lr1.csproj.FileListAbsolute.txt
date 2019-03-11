@@ -58,3 +58,14 @@ C:\Users\Andrey\Desktop\Курсовой сапрыкина\Материалы �
 C:\Users\Andrey\Desktop\Курсовой сапрыкина\Материалы Андрюши\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csproj.CoreCompileInputs.cache
 C:\Users\Andrey\Desktop\Курсовой сапрыкина\Материалы Андрюши\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.exe
 C:\Users\Andrey\Desktop\Курсовой сапрыкина\Материалы Андрюши\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.pdb
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\bin\Debug\SystAnalys_lr1.exe.config
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\bin\Debug\SystAnalys_lr1.exe
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\bin\Debug\SystAnalys_lr1.pdb
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csprojAssemblyReference.cache
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.aboutForm.resources
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.Form1.resources
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.Properties.Resources.resources
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csproj.GenerateResource.cache
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csproj.CoreCompileInputs.cache
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.exe
+C:\Users\Vikus\Documents\GitHub\viktoria_Lukyanova\Curso\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.pdb
