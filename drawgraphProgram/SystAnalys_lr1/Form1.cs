@@ -16,8 +16,8 @@ namespace SystAnalys_lr1
         DrawGraph G;
         List<Vertex> V;
         List<Edge> E;
-        int[,] AMatrix; //матрица смежности
-        int[,] IMatrix; //матрица инцидентности
+
+        float[,] AMatrix; //матрица смежности
 
         int selected1; //выбранные вершины, для соединения линиями
         int selected2;
@@ -38,10 +38,11 @@ namespace SystAnalys_lr1
             drawVertexButton.Enabled = true;
             drawEdgeButton.Enabled = true;
             deleteButton.Enabled = true;
-            G.clearSheet();
-            G.drawALLGraph(V, E);
+           // G.clearSheet();
+           // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
             selected1 = -1;
+
         }
 
         //кнопка - рисовать вершину
@@ -51,8 +52,8 @@ namespace SystAnalys_lr1
             selectButton.Enabled = true;
             drawEdgeButton.Enabled = true;
             deleteButton.Enabled = true;
-            G.clearSheet();
-            G.drawALLGraph(V, E);
+           // G.clearSheet();
+           // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
         }
 
@@ -63,8 +64,8 @@ namespace SystAnalys_lr1
             selectButton.Enabled = true;
             drawVertexButton.Enabled = true;
             deleteButton.Enabled = true;
-            G.clearSheet();
-            G.drawALLGraph(V, E);
+           // G.clearSheet();
+           // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
             selected1 = -1;
             selected2 = -1;
@@ -77,8 +78,8 @@ namespace SystAnalys_lr1
             selectButton.Enabled = true;
             drawVertexButton.Enabled = true;
             drawEdgeButton.Enabled = true;
-            G.clearSheet();
-            G.drawALLGraph(V, E);
+           // G.clearSheet();
+           // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
         }
 
@@ -105,13 +106,7 @@ namespace SystAnalys_lr1
         private void buttonAdj_Click(object sender, EventArgs e)
         {
             createAdjAndOut();
-        }
-
-        //кнопка - матрица инцидентности 
-        private void buttonInc_Click(object sender, EventArgs e)
-        {
-            createIncAndOut();
-        }
+        }        
 
         private void sheet_MouseClick(object sender, MouseEventArgs e)
         {
@@ -125,8 +120,8 @@ namespace SystAnalys_lr1
                         if (selected1 != -1)
                         {
                             selected1 = -1;
-                            G.clearSheet();
-                            G.drawALLGraph(V, E);
+                           // G.clearSheet();
+                           // G.drawALLGraph(V, E);
                             sheet.Image = G.GetBitmap();
                         }
                         if (selected1 == -1)
@@ -135,11 +130,9 @@ namespace SystAnalys_lr1
                             selected1 = i;
                             sheet.Image = G.GetBitmap();
                             createAdjAndOut();
-                            listBoxMatrix.Items.Clear();
-                            int degree = 0;
+                            float degree = 0;
                             for (int j = 0; j < V.Count; j++)
                                 degree += AMatrix[selected1, j];
-                            listBoxMatrix.Items.Add("Степень вершины №" + (selected1 + 1) + " равна " + degree);
                             break;
                         }
                     }
@@ -173,7 +166,7 @@ namespace SystAnalys_lr1
                                 G.drawSelectedVertex(V[i].x, V[i].y);
                                 selected2 = i;
                                 E.Add(new Edge(selected1, selected2));
-                                G.drawEdge(V[selected1], V[selected2], E[E.Count - 1], E.Count - 1);
+                                G.drawEdge(V[selected1], V[selected2], E[E.Count - 1]);
                                 selected1 = -1;
                                 selected2 = -1;
                                 sheet.Image = G.GetBitmap();
@@ -215,7 +208,7 @@ namespace SystAnalys_lr1
                                 if (E[j].v2 > i) E[j].v2--;
                             }
                         }
-                        V.RemoveAt(i);
+                        V.RemoveAt(i);                        
                         flag = true;
                         break;
                     }
@@ -231,6 +224,7 @@ namespace SystAnalys_lr1
                                 (Math.Pow((V[E[i].v1].x - G.R - e.X), 2) + Math.Pow((V[E[i].v1].y - G.R - e.Y), 2) >= ((G.R - 2) * (G.R - 2))))
                             {
                                 E.RemoveAt(i);
+                                G.DelWT(i);
                                 flag = true;
                                 break;
                             }
@@ -243,6 +237,7 @@ namespace SystAnalys_lr1
                                 if ((V[E[i].v1].x <= V[E[i].v2].x && V[E[i].v1].x <= e.X && e.X <= V[E[i].v2].x) ||
                                     (V[E[i].v1].x >= V[E[i].v2].x && V[E[i].v1].x >= e.X && e.X >= V[E[i].v2].x))
                                 {
+                                    G.DelWT(i);
                                     E.RemoveAt(i);
                                     flag = true;
                                     break;
@@ -254,170 +249,51 @@ namespace SystAnalys_lr1
                 //если что-то было удалено, то обновляем граф на экране
                 if (flag)
                 {
-                    G.clearSheet();
+                    G.clearOne();
                     G.drawALLGraph(V, E);
                     sheet.Image = G.GetBitmap();
                 }
             }
         }
 
-        //создание матрицы смежности и вывод в листбокс
+        //создание матрицы смежности и вывод в datagrid
         private void createAdjAndOut()
         {
-            AMatrix = new int[V.Count, V.Count];
+            AMatrix = new float[V.Count, V.Count];
             G.fillAdjacencyMatrix(V.Count, E, AMatrix);
-            listBoxMatrix.Items.Clear();
-            string sOut = "    ";
-            for (int i = 0; i < V.Count; i++)
-                sOut += (i + 1) + " ";
-            listBoxMatrix.Items.Add(sOut);
+
+            tableEnter.Rows.Clear();
+            tableEnter.Columns.Clear();
+
+            for (int i = 1; i <= V.Count; i++)
+            {
+                var colum = new DataGridViewColumn();
+                colum.HeaderText = i.ToString();
+                colum.Width = 50;
+                colum.CellTemplate = new DataGridViewTextBoxCell();
+                tableEnter.Columns.Add(colum);
+            }
+
+            tableEnter.Rows.Add(V.Count - 1);
+            float ch;
             for (int i = 0; i < V.Count; i++)
             {
-                sOut = (i + 1) + " | ";
+                tableEnter.Rows[i].HeaderCell.Value = (i + 1).ToString();
+                ch = 0;
                 for (int j = 0; j < V.Count; j++)
-                    sOut += AMatrix[i, j] + " ";
-                listBoxMatrix.Items.Add(sOut);
-            }
-        }
-
-        //создание матрицы инцидентности и вывод в листбокс
-        private void createIncAndOut()
-        {
-            if (E.Count > 0)
-            {
-                IMatrix = new int[V.Count, E.Count];
-                G.fillIncidenceMatrix(V.Count, E, IMatrix);
-                listBoxMatrix.Items.Clear();
-                string sOut = "    ";
-                for (int i = 0; i < E.Count; i++)
-                    sOut += (char)('a' + i) + " ";
-                listBoxMatrix.Items.Add(sOut);
-                for (int i = 0; i < V.Count; i++)
                 {
-                    sOut = (i + 1) + " | ";
-                    for (int j = 0; j < E.Count; j++)
-                        sOut += IMatrix[i, j] + " ";
-                    listBoxMatrix.Items.Add(sOut);
+                    
+                    tableEnter[j, i].Value = AMatrix[i, j];
+                    ch += AMatrix[i, j];                    
                 }
-            }
-            else
-                listBoxMatrix.Items.Clear();
-        }
-
-        //поиск элементарных цепей
-        private void chainButton_Click(object sender, EventArgs e)
-        {
-            listBoxMatrix.Items.Clear();
-            //1-white 2-black
-            int[] color = new int[V.Count];
-            for (int i = 0; i < V.Count - 1; i++)
-                for (int j = i + 1; j < V.Count; j++)
+                if (ch > 1)
                 {
-                    for (int k = 0; k < V.Count; k++)
-                        color[k] = 1;
-                    DFSchain(i, j, E, color, (i + 1).ToString());
+                    tableEnter.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
+                    MessageBox.Show("Ошибка в строке");
                 }
-        }
-
-        //обход в глубину. поиск элементарных цепей. (1-white 2-black)
-        private void DFSchain(int u, int endV, List<Edge> E, int[] color, string s)
-        {
-            //вершину не следует перекрашивать, если u == endV (возможно в нее есть несколько путей)
-            if (u != endV)  
-                color[u] = 2;
-            else
-            {
-                listBoxMatrix.Items.Add(s);
-                return;
+                
             }
-            for (int w = 0; w < E.Count; w++)
-            {
-                if (color[E[w].v2] == 1 && E[w].v1 == u)
-                {
-                    DFSchain(E[w].v2, endV, E, color, s + "-" + (E[w].v2 + 1).ToString());
-                    color[E[w].v2] = 1;
-                }
-                else if (color[E[w].v1] == 1 && E[w].v2 == u)
-                {
-                    DFSchain(E[w].v1, endV, E, color, s + "-" + (E[w].v1 + 1).ToString());
-                    color[E[w].v1] = 1;
-                }
-            }
-        }
-
-        //поиск элементарных циклов
-        private void cycleButton_Click(object sender, EventArgs e)
-        {
-            listBoxMatrix.Items.Clear();
-            //1-white 2-black
-            int[] color = new int[V.Count];
-            for (int i = 0; i < V.Count; i++)
-            {
-                for (int k = 0; k < V.Count; k++)
-                    color[k] = 1;
-                List<int> cycle = new List<int>();
-                cycle.Add(i + 1);
-                DFScycle(i, i, E, color, -1, cycle);
-            }
-        }
-
-        //обход в глубину. поиск элементарных циклов. (1-white 2-black)
-        //Вершину, для которой ищем цикл, перекрашивать в черный не будем. Поэтому, для избежания неправильной
-        //работы программы, введем переменную unavailableEdge, в которой будет хранится номер ребра, исключаемый
-        //из рассмотрения при обходе графа. В действительности это необходимо только на первом уровне рекурсии,
-        //чтобы избежать вывода некорректных циклов вида: 1-2-1, при наличии, например, всего двух вершин.
-
-        private void DFScycle(int u, int endV, List<Edge> E, int[] color, int unavailableEdge, List<int> cycle)
-        {
-            //если u == endV, то эту вершину перекрашивать не нужно, иначе мы в нее не вернемся, а вернуться необходимо
-            if (u != endV)
-                color[u] = 2;
-            else
-            {
-                if (cycle.Count >= 2)
-                {
-                    cycle.Reverse();
-                    string s = cycle[0].ToString();
-                    for (int i = 1; i < cycle.Count; i++)
-                        s += "-" + cycle[i].ToString();
-                    bool flag = false; //есть ли палиндром для этого цикла графа в листбоксе?
-                    for (int i = 0; i < listBoxMatrix.Items.Count; i++)
-                        if (listBoxMatrix.Items[i].ToString() == s)
-                        {
-                            flag = true;
-                            break;
-                        }
-                    if (!flag)
-                    {
-                        cycle.Reverse();
-                        s = cycle[0].ToString();
-                        for (int i = 1; i < cycle.Count; i++)
-                            s += "-" + cycle[i].ToString();
-                        listBoxMatrix.Items.Add(s);
-                    }
-                    return;
-                }
-            }
-            for (int w = 0; w < E.Count; w++)
-            {
-                if (w == unavailableEdge)
-                    continue;
-                if (color[E[w].v2] == 1 && E[w].v1 == u)
-                {
-                    List<int> cycleNEW = new List<int>(cycle);
-                    cycleNEW.Add(E[w].v2 + 1);
-                    DFScycle(E[w].v2, endV, E, color, w, cycleNEW);
-                    color[E[w].v2] = 1;
-                }
-                else if (color[E[w].v1] == 1 && E[w].v2 == u)
-                {
-                    List<int> cycleNEW = new List<int>(cycle);
-                    cycleNEW.Add(E[w].v1 + 1);
-                    DFScycle(E[w].v1, endV, E, color, w, cycleNEW);
-                    color[E[w].v1] = 1;
-                }
-            }
-        }
+        }               
 
         //О программе
         private void about_Click(object sender, EventArgs e)
@@ -450,6 +326,6 @@ namespace SystAnalys_lr1
                 }
             }
         }
-        
+
     }
 }

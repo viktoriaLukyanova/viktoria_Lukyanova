@@ -47,3 +47,15 @@ C:\Users\Andrey\Desktop\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1
 C:\Users\Andrey\Desktop\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csproj.CoreCompileInputs.cache
 C:\Users\Andrey\Desktop\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.exe
 C:\Users\Andrey\Desktop\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.pdb
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\bin\Debug\SystAnalys_lr1.exe
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\bin\Debug\SystAnalys_lr1.exe.config
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\bin\Debug\SystAnalys_lr1.pdb
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csprojAssemblyReference.cache
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.aboutForm.resources
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.Form1.resources
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.Properties.Resources.resources
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.Request.resources
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csproj.GenerateResource.cache
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.csproj.CoreCompileInputs.cache
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.exe
+C:\Users\Andrey\Desktop\Git\viktoria_Lukyanova\drawgraphProgram\SystAnalys_lr1\obj\Debug\SystAnalys_lr1.pdb
