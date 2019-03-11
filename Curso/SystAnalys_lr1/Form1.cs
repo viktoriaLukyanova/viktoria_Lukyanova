@@ -256,11 +256,19 @@ namespace SystAnalys_lr1
             }
         }
        
+        private void ExeptVLoclMin()
+        {
+            AMatrix = new int[V.Count, V.Count];
+            G.fillAdjacencyMatrix(V.Count, E, AMatrix);
+        }
+
+
         //создание матрицы смежности и вывод в листбокс
         private void createAdjAndOut()
         {
             AMatrix = new int[V.Count, V.Count];
             G.fillAdjacencyMatrix(V.Count, E, AMatrix);
+
             listBoxMatrix.Items.Clear();
             string sOut = "    ";
             for (int i = 0; i < V.Count; i++)
