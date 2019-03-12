@@ -18,9 +18,9 @@ namespace SystAnalys_lr1
         List<Vertex> V;
         List<Edge> E;
         int[,] AMatrix; //матрица смежности
-        List <int> S = new List <int>();
+        List<int> S = new List<int>();
         List<int> Ex = new List<int>();
-        List<int> Rep = new List<int>();
+        Dictionary<int, int> Dic = new Dictionary<int, int>();
         public int n = 0;
 
         int selected1; //выбранные вершины, для соединения линиями
@@ -260,34 +260,32 @@ namespace SystAnalys_lr1
                 }
             }
         }
-       
-        private void ExeptVLockMin()
+
+        private void ExeptVLockMin(int[,] AAMatrix, int n)
         {
-            AMatrix = new int[V.Count, V.Count];
-            G.fillAdjacencyMatrix(V.Count, E, AMatrix);
             bool log = false;
-            for(int i=0; i<V.Count; i++)
+            for (int i = 0; i < V.Count; i++)
             {
                 if (log == true)
                 {
                     i = 0;
                 }
                 int loc = 0;
-                for(int j=0; j<V.Count; j++)
+                for (int j = 0; j < V.Count; j++)
                 {
-                    if (AMatrix[i,j] ==1)
+                    if (AAMatrix[i, j] == 1)
                     {
                         loc++;
                     }
                 }
-                if (loc < LockS.Value && loc!=0)
+                if (loc < LockS.Value - n && loc != 0)
                 {
-                    S.Add(i+1);
+                    S.Add(i + 1);
                     Ex.Remove(i + 1);
-                    for(int k=0; k<V.Count; k++)
+                    for (int k = 0; k < V.Count; k++)
                     {
-                        AMatrix[i, k] = 0;
-                        AMatrix[k, i] = 0;                        
+                        AAMatrix[i, k] = 0;
+                        AAMatrix[k, i] = 0;
                     }
                     log = true;
                 }
@@ -296,77 +294,114 @@ namespace SystAnalys_lr1
                     log = false;
                 }
             }
-            for(int i=0; i<V.Count; i++)
+            int[,] matrTest = new int[V.Count, V.Count];
+            for (int i = 0; i < V.Count; i++)
             {
-                for(int j=0; j<V.Count; j++)
+                for (int j = 0; j < V.Count; j++)
                 {
-
+                    matrTest[i, j] = AAMatrix[i, j];
                 }
             }
-            if (Ex.Count == 0)
+            List<int> L = new List<int>();
+            L.AddRange(Ex.ToArray());
+            L = EMax(matrTest, L);
+            if (L.Count == 0)
             {
-                //завершино
+               /*int[] mas = new int[Dic.Count];
+                Dic.Keys.CopyTo(mas, 0);
+
+                for (int j = 0; j < mas.Length; j++)
+                {
+                    listBoxMatrix.Items.Add((Dic[mas[j]] + 1) + "    " + mas[j]);
+                }*/
             }
             else
             {
-                for (int i = 0; i < Ex.Count; i++)
+                for (int i = 0; i < V.Count; i++)
                 {
-                    string str = null;
-                    str += Ex[i].ToString();
+                    for (int j = 0; j < V.Count; j++)
+                    {
+                        if (L.Contains(i + 1))
+                        {
+                            AAMatrix[i, j] = 0;
+                            AAMatrix[j, i] = 0;
+                        }
+
+                    }
+
                 }
+                for (int i = 0; i < L.Count; i++)
+                {
+                    Dic.Add(L[i], n);
+                    Ex.Remove(L[i]);
+                }
+                n++;
+                if (CheckMatrZero(AAMatrix) == true && LockS.Value - n <= 0)
+                {
+                   /* int[] mas = new int[Dic.Count];
+                    Dic.Keys.CopyTo(mas, 0);
+
+                    for (int j = 0; j < mas.Length; j++)
+                    {
+                        listBoxMatrix.Items.Add((Dic[mas[j]] + 1) + "    " + mas[j]);
+                    }*/
+                }
+                else
+                {
+                    ExeptVLockMin(AAMatrix, n);
+                }
+
             }
-            
         }
 
-        private bool CheckMatrZero (int[,] m)
+        private bool CheckMatrZero(int[,] m)
         {
-            foreach(int el in m)
+            foreach (int el in m)
             {
                 if (el != 0)
                 {
                     return false;
-                    break;
                 }
             }
             return true;
         }
-        private void EMax(int[,] mat)
+        private List<int> EMax(int[,] mat, List<int> L)
         {
             int max = 0;
             int index = 0;
             for (int i = 0; i < V.Count; i++)
             {
-                if (!Rep.Contains(i))
+
+                int loc = 0;
+                if (L.Contains(i + 1))
                 {
-                    int loc = 0;
                     for (int j = 0; j < V.Count; j++)
                     {
+
                         if (mat[i, j] == 1)
                         {
                             loc++;
                         }
                     }
-                    if (loc > max)
-                    {
-                        max = loc;
-                        index = i;
-                    }
                 }
-            }            
-                for(int j=0; j<V.Count; j++)
+                if (loc > max)
                 {
+                    max = loc;
+                    index = i;
+                }
+
+            }
+            for (int j = 0; j < V.Count; j++)
+            {
                 mat[index, j] = 0;
                 mat[j, index] = 0;
-                }           
-            
-            Rep.Add(index);
-            Ex.Remove(index);
-
-            while (CheckMatrZero(AMatrix) == false)
-            {
-                EMax(AMatrix);
             }
-
+            L.Remove(index + 1);
+            while (CheckMatrZero(mat) == false)
+            {
+                EMax(mat, L);
+            }
+            return L;
         }
 
         //создание матрицы смежности и вывод в листбокс
@@ -387,7 +422,7 @@ namespace SystAnalys_lr1
                 listBoxMatrix.Items.Add(sOut);
             }
         }
-        
+
 
         //О программе
         private void about_Click(object sender, EventArgs e)
@@ -420,20 +455,78 @@ namespace SystAnalys_lr1
                 }
             }
         }
-
-        private void Form1_Load(object sender, EventArgs e)
+        private int SourseP(int v)
         {
+            int p = 0;
+            for (int j = 0; j < V.Count; j++)
+            {
+                if (AMatrix[v, j] == 1)
+                {
+                    p++;
+                }
+                return p;
+                
+            }
+            return 0;
+        }
+
+        private void RToSloy()
+        {
+            int countSloy = 0;
+            int v = SourseP(S.Last());
+            int[] verP = new int[v];
+            for (int i = 0; i < V.Count; i++)
+            {
+                if (AMatrix[S.Last(), i] == 1)
+                {
+                    verP[v] = i;
+                    v--;
+                }
+            }
+            while (countSloy <= LockS.Value)
+            {
+                for (int i = 0; i < verP.Length; i++)
+                {
+                    if (Dic[verP[i]] != verP[i] && Dic.ContainsValue(countSloy))
+                    {
+                        Dic.Add(verP[i],countSloy);
+                        S.RemoveAt(verP[i]);
+                    }
+                    else
+                    {
+                        countSloy++;
+                    }
+                }
+            }
+            if (S.Count != 0)
+            {
+                RToSloy();
+            }
+            else
+            {
+                int[] mas = new int[Dic.Count];
+                Dic.Keys.CopyTo(mas, 0);
+
+                for (int j = 0; j < mas.Length; j++)
+                {
+                    listBoxMatrix.Items.Add((Dic[mas[j]] + 1) + "    " + mas[j]);
+                }
+            }
 
         }
 
         private void btnDraw_Click(object sender, EventArgs e)
         {
-            ExeptVLockMin();
+            int[,] AAMatrix = new int[V.Count, V.Count];
+            G.fillAdjacencyMatrix(V.Count, E, AAMatrix);
             listBoxMatrix.Items.Clear();
-            for (int i = 0; i < S.Count; i++)
+            ExeptVLockMin(AAMatrix, n);
+            RToSloy();
+            /*for (int i = 0; i < S.Count; i++)
             {
                 listBoxMatrix.Items.Add(S[i]);
-            }
+            }*/
+
         }
     }
 }
