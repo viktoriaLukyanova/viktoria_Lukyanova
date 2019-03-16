@@ -16,5 +16,11 @@ namespace SystAnalys_lr1
         {
             InitializeComponent();
         }
+
+        private void aboutForm_Load(object sender, EventArgs e)
+        {
+            txtt.Text = Properties.Resources.Справка;
+            txtt.Select(0, 0);
+        }
     }
 }

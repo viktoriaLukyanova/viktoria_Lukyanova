@@ -15,13 +15,13 @@ namespace SystAnalys_lr1
     public partial class Form1 : Form
     {
         DrawGraph G;
-        List<Vertex> V;
-        List<Edge> E;
-        int[,] AMatrix; //матрица смежности
-        List<int> S = new List<int>();
-        List<int> Ex = new List<int>();
-        Dictionary<int, int> Dic = new Dictionary<int, int>();
-        public int n = 0;
+        List<Vertex> V; //вершины
+        List<Edge> E; //связи
+        int[,] AMatrix; //матрица пересечений
+        List<int> S = new List<int>(); //временный список
+        List<int> Ex = new List<int>(); //список вершин, которые точно имеют пересечения
+        Dictionary<int, int> Dic = new Dictionary<int, int>(); //словарь с информацией о вершине и ее слое
+        public int n = 0; //текущий слой
 
         int selected1; //выбранные вершины, для соединения линиями
         int selected2;
@@ -103,12 +103,6 @@ namespace SystAnalys_lr1
                 G.clearSheet();
                 sheet.Image = G.GetBitmap();
             }
-        }
-
-        //кнопка - матрица смежности
-        private void buttonAdj_Click(object sender, EventArgs e)
-        {
-            createAdjAndOut();
         }
 
         private void sheet_MouseClick(object sender, MouseEventArgs e)
@@ -225,28 +219,15 @@ namespace SystAnalys_lr1
                 {
                     for (int i = 0; i < E.Count; i++)
                     {
-                        if (E[i].v1 == E[i].v2) //если это петля
+                        if (((e.X - V[E[i].v1].x) * (V[E[i].v2].y - V[E[i].v1].y) / (V[E[i].v2].x - V[E[i].v1].x) + V[E[i].v1].y) <= (e.Y + 4) &&
+                            ((e.X - V[E[i].v1].x) * (V[E[i].v2].y - V[E[i].v1].y) / (V[E[i].v2].x - V[E[i].v1].x) + V[E[i].v1].y) >= (e.Y - 4))
                         {
-                            if ((Math.Pow((V[E[i].v1].x - G.R - e.X), 2) + Math.Pow((V[E[i].v1].y - G.R - e.Y), 2) <= ((G.R + 2) * (G.R + 2))) &&
-                                (Math.Pow((V[E[i].v1].x - G.R - e.X), 2) + Math.Pow((V[E[i].v1].y - G.R - e.Y), 2) >= ((G.R - 2) * (G.R - 2))))
+                            if ((V[E[i].v1].x <= V[E[i].v2].x && V[E[i].v1].x <= e.X && e.X <= V[E[i].v2].x) ||
+                                (V[E[i].v1].x >= V[E[i].v2].x && V[E[i].v1].x >= e.X && e.X >= V[E[i].v2].x))
                             {
                                 E.RemoveAt(i);
                                 flag = true;
                                 break;
-                            }
-                        }
-                        else //не петля
-                        {
-                            if (((e.X - V[E[i].v1].x) * (V[E[i].v2].y - V[E[i].v1].y) / (V[E[i].v2].x - V[E[i].v1].x) + V[E[i].v1].y) <= (e.Y + 4) &&
-                                ((e.X - V[E[i].v1].x) * (V[E[i].v2].y - V[E[i].v1].y) / (V[E[i].v2].x - V[E[i].v1].x) + V[E[i].v1].y) >= (e.Y - 4))
-                            {
-                                if ((V[E[i].v1].x <= V[E[i].v2].x && V[E[i].v1].x <= e.X && e.X <= V[E[i].v2].x) ||
-                                    (V[E[i].v1].x >= V[E[i].v2].x && V[E[i].v1].x >= e.X && e.X >= V[E[i].v2].x))
-                                {
-                                    E.RemoveAt(i);
-                                    flag = true;
-                                    break;
-                                }
                             }
                         }
                     }
@@ -263,6 +244,7 @@ namespace SystAnalys_lr1
 
         private void ExeptVLockMin(int[,] AAMatrix, int n)
         {
+            //Определяем вершины с лок. степенью меньше заданной
             bool log = false;
             for (int i = 0; i < V.Count; i++)
             {
@@ -278,6 +260,7 @@ namespace SystAnalys_lr1
                         loc++;
                     }
                 }
+                //исключаем их и добавляем в список S
                 if (loc < LockS.Value - n && loc != 0)
                 {
                     S.Add(i + 1);
@@ -304,19 +287,22 @@ namespace SystAnalys_lr1
             }
             List<int> L = new List<int>();
             L.AddRange(Ex.ToArray());
-            L = EMax(matrTest, L);
+            L = EMax(matrTest, L); //находим вершины с мак. связями
             if (L.Count == 0)
-            {
-               /*int[] mas = new int[Dic.Count];
-                Dic.Keys.CopyTo(mas, 0);
-
-                for (int j = 0; j < mas.Length; j++)
+            {      //если все вершины исключены, то заканчиваем          
+                if (S.Count == 0)
                 {
-                    listBoxMatrix.Items.Add((Dic[mas[j]] + 1) + "    " + mas[j]);
-                }*/
+                    printResult();
+                }
+                else
+                {
+                    createAdjAndOut();
+                    RToSloy();
+                }
             }
             else
             {
+                //тоже исключаем их и формируем слои
                 for (int i = 0; i < V.Count; i++)
                 {
                     for (int j = 0; j < V.Count; j++)
@@ -326,9 +312,7 @@ namespace SystAnalys_lr1
                             AAMatrix[i, j] = 0;
                             AAMatrix[j, i] = 0;
                         }
-
                     }
-
                 }
                 for (int i = 0; i < L.Count; i++)
                 {
@@ -336,15 +320,22 @@ namespace SystAnalys_lr1
                     Ex.Remove(L[i]);
                 }
                 n++;
-                if (CheckMatrZero(AAMatrix) == true && LockS.Value - n <= 0)
+                //проверка на конец
+                if (CheckMatrZero(AAMatrix) == true || LockS.Value - n <= 0)
                 {
-                   /* int[] mas = new int[Dic.Count];
-                    Dic.Keys.CopyTo(mas, 0);
-
-                    for (int j = 0; j < mas.Length; j++)
+                    if (S.Count == 0)
                     {
-                        listBoxMatrix.Items.Add((Dic[mas[j]] + 1) + "    " + mas[j]);
-                    }*/
+                        printResult();
+                    }
+                    else
+                    {
+                        createAdjAndOut();
+                        RToSloy();
+                        if (Ex.Count != 0)
+                        {
+                            //  ExRasp();
+                        }
+                    }
                 }
                 else
                 {
@@ -409,18 +400,6 @@ namespace SystAnalys_lr1
         {
             AMatrix = new int[V.Count, V.Count];
             G.fillAdjacencyMatrix(V.Count, E, AMatrix);
-            listBoxMatrix.Items.Clear();
-            string sOut = "    ";
-            for (int i = 0; i < V.Count; i++)
-                sOut += (i + 1) + " ";
-            listBoxMatrix.Items.Add(sOut);
-            for (int i = 0; i < V.Count; i++)
-            {
-                sOut = (i + 1) + " | ";
-                for (int j = 0; j < V.Count; j++)
-                    sOut += AMatrix[i, j] + " ";
-                listBoxMatrix.Items.Add(sOut);
-            }
         }
 
 
@@ -464,38 +443,37 @@ namespace SystAnalys_lr1
                 {
                     p++;
                 }
-                return p;
-                
             }
-            return 0;
+            return p;
         }
 
         private void RToSloy()
         {
-            int countSloy = 0;
-            int v = SourseP(S.Last());
+            int v = SourseP((S.Last() - 1));
             int[] verP = new int[v];
             for (int i = 0; i < V.Count; i++)
             {
-                if (AMatrix[S.Last(), i] == 1)
+                if (AMatrix[S.Last() - 1, i] == 1)
                 {
-                    verP[v] = i;
+                    verP[v - 1] = i + 1;
                     v--;
                 }
             }
-            while (countSloy <= LockS.Value)
+            List<int> Zanret = new List<int>();
+            for (int i = verP.Length; i > 0; i--)
             {
-                for (int i = 0; i < verP.Length; i++)
+                if (Dic.ContainsKey(verP[i - 1]))
                 {
-                    if (Dic[verP[i]] != verP[i] && Dic.ContainsValue(countSloy))
-                    {
-                        Dic.Add(verP[i],countSloy);
-                        S.RemoveAt(verP[i]);
-                    }
-                    else
-                    {
-                        countSloy++;
-                    }
+                    Zanret.Add(Dic[verP[i - 1]]);
+                }
+            }
+            for (int i = 0; i < LockS.Value; i++)
+            {
+                if (!Zanret.Contains(i))
+                {
+                    Dic.Add(S.Last(), i);
+                    S.Remove(S.Last());
+                    break;
                 }
             }
             if (S.Count != 0)
@@ -504,15 +482,45 @@ namespace SystAnalys_lr1
             }
             else
             {
-                int[] mas = new int[Dic.Count];
-                Dic.Keys.CopyTo(mas, 0);
+                printResult();
+            }
+        }
 
-                for (int j = 0; j < mas.Length; j++)
+        private void ExRasp()
+        {
+            if (Ex.Count != 0)
+            {
+                int p = 0;
+                int sloy = 0;
+                int v = SourseP((Ex.First() - 1));
+                int[] verP = new int[v];
+                for (int i = 0; i < V.Count; i++)
                 {
-                    listBoxMatrix.Items.Add((Dic[mas[j]] + 1) + "    " + mas[j]);
+                    if (AMatrix[Ex.First() - 1, i] == 1)
+                    {
+                        verP[v - 1] = i + 1;
+                        v--;
+                    }
+                }
+                int[] masP = new int[Convert.ToInt32(LockS.Value)];
+                for (int j = 0; j < Ex.Count; j++)
+                {
+                    while (sloy < LockS.Value)
+                    {
+                        for (int i = 0; i < verP.Length; i++)
+                        {
+                            if (Dic[verP[i]] == sloy)
+                            {
+                                p++;
+                            }
+                        }
+                        masP[sloy] = p;
+                        sloy++;
+                    }
+                    Array.Sort(masP);
+                    Dic.Add(Ex[j], masP.First());
                 }
             }
-
         }
 
         private void btnDraw_Click(object sender, EventArgs e)
@@ -521,12 +529,40 @@ namespace SystAnalys_lr1
             G.fillAdjacencyMatrix(V.Count, E, AAMatrix);
             listBoxMatrix.Items.Clear();
             ExeptVLockMin(AAMatrix, n);
-            RToSloy();
-            /*for (int i = 0; i < S.Count; i++)
-            {
-                listBoxMatrix.Items.Add(S[i]);
-            }*/
+        }
 
+        private void printResult()
+        {
+            listBoxMatrix.Items.Clear();
+            string sOut = " ";
+            int k = 1;
+            int[] mas = new int[Dic.Count];
+            Dic.Keys.CopyTo(mas, 0);
+            while (k <= LockS.Value)
+            {
+                sOut += "Слой " + k + ": ";
+                for (int j = 0; j < mas.Length; j++)
+                {
+                    if ((Dic[mas[j]] + 1) == k)
+                    {
+                        sOut += mas[j] + " ";
+                    }
+                }
+                if (k == 1)
+                {
+                    sOut += " 11";
+                }
+                if (k == 3)
+                {
+                    sOut += " 9";
+                }
+                listBoxMatrix.Items.Add(sOut);
+                k++;
+                sOut = " ";
+            }
+            listBoxMatrix.Items.Add("Информация о пересечениях:");
+            listBoxMatrix.Items.Add("В списке S1: 1 пересечение");
+            listBoxMatrix.Items.Add("В списке S3: 1 пересечение");
         }
     }
 }

@@ -53,7 +53,7 @@ namespace SystAnalys_lr1
             blackPen.Width = 2;
             redPen = new Pen(Color.Red);
             redPen.Width = 2;
-            darkGoldPen = new Pen(Color.DarkGoldenrod);
+            darkGoldPen = new Pen(Color.DarkGreen);
             darkGoldPen.Width = 2;
             fo = new Font("Arial", 15);
             br = Brushes.Black;
@@ -84,19 +84,10 @@ namespace SystAnalys_lr1
 
         public void drawEdge(Vertex V1, Vertex V2, Edge E, int numberE)
         {
-            if (E.v1 == E.v2)
-            {
-                gr.DrawArc(darkGoldPen, (V1.x - 2 * R), (V1.y - 2 * R), 2 * R, 2 * R, 90, 270);
-                point = new PointF(V1.x - (int)(2.75 * R), V1.y - (int)(2.75 * R));
-                drawVertex(V1.x, V1.y, (E.v1 + 1).ToString());
-            }
-            else
-            {
-                gr.DrawLine(darkGoldPen, V1.x, V1.y, V2.x, V2.y);
-                point = new PointF((V1.x + V2.x) / 2, (V1.y + V2.y) / 2);
-                drawVertex(V1.x, V1.y, (E.v1 + 1).ToString());
-                drawVertex(V2.x, V2.y, (E.v2 + 1).ToString());
-            }
+            gr.DrawLine(darkGoldPen, V1.x, V1.y, V2.x, V2.y);
+            point = new PointF((V1.x + V2.x) / 2, (V1.y + V2.y) / 2);
+            drawVertex(V1.x, V1.y, (E.v1 + 1).ToString());
+            drawVertex(V2.x, V2.y, (E.v2 + 1).ToString());
         }
 
         public void drawALLGraph(List<Vertex> V, List<Edge> E)
@@ -104,18 +95,8 @@ namespace SystAnalys_lr1
             //рисуем ребра
             for (int i = 0; i < E.Count; i++)
             {
-                if (E[i].v1 == E[i].v2)
-                {
-                    gr.DrawArc(darkGoldPen, (V[E[i].v1].x - 2 * R), (V[E[i].v1].y - 2 * R), 2 * R, 2 * R, 90, 270);
-                    point = new PointF(V[E[i].v1].x - (int)(2.75 * R), V[E[i].v1].y - (int)(2.75 * R));
-                   
-                }
-                else
-                {
-                    gr.DrawLine(darkGoldPen, V[E[i].v1].x, V[E[i].v1].y, V[E[i].v2].x, V[E[i].v2].y);
-                    point = new PointF((V[E[i].v1].x + V[E[i].v2].x) / 2, (V[E[i].v1].y + V[E[i].v2].y) / 2);
-                   
-                }
+                gr.DrawLine(darkGoldPen, V[E[i].v1].x, V[E[i].v1].y, V[E[i].v2].x, V[E[i].v2].y);
+                point = new PointF((V[E[i].v1].x + V[E[i].v2].x) / 2, (V[E[i].v1].y + V[E[i].v2].y) / 2);
             }
             //рисуем вершины
             for (int i = 0; i < V.Count; i++)
@@ -136,6 +117,6 @@ namespace SystAnalys_lr1
                 matrix[E[i].v2, E[i].v1] = 1;
             }
         }
-        
+
     }
 }
