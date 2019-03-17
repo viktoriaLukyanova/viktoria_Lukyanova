@@ -77,6 +77,7 @@
             this.btnClean.TabIndex = 2;
             this.btnClean.Text = "Очистить таблицу транзакций";
             this.btnClean.UseVisualStyleBackColor = true;
+            this.btnClean.Click += new System.EventHandler(this.btnClean_Click);
             // 
             // btnGetAs
             // 
@@ -86,6 +87,7 @@
             this.btnGetAs.TabIndex = 3;
             this.btnGetAs.Text = "Получить правила";
             this.btnGetAs.UseVisualStyleBackColor = true;
+            this.btnGetAs.Click += new System.EventHandler(this.btnGetAs_Click);
             // 
             // openExcel
             // 
