@@ -1,0 +1,11 @@
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\bin\Debug\AssociationRule.exe.config
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\bin\Debug\AssociationRule.exe
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\bin\Debug\AssociationRule.pdb
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.csprojAssemblyReference.cache
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.csproj.ResolveComReference.cache
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.Form1.resources
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.Properties.Resources.resources
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.csproj.GenerateResource.cache
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.csproj.CoreCompileInputs.cache
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.exe
+C:\Users\Andrey\source\repos\AssociationRule\AssociationRule\obj\Debug\AssociationRule.pdb
