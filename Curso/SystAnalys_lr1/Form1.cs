@@ -298,6 +298,11 @@ namespace SystAnalys_lr1
                 {
                     createAdjAndOut();
                     RToSloy();
+                    if (Ex.Count != 0)
+                    {
+                        ExRasp();
+                        printResult();
+                    }
                 }
             }
             else
@@ -325,6 +330,10 @@ namespace SystAnalys_lr1
                 {
                     if (S.Count == 0)
                     {
+                        if (Ex.Count != 0)
+                        {
+                            ExRasp();
+                        }
                         printResult();
                     }
                     else
@@ -333,7 +342,8 @@ namespace SystAnalys_lr1
                         RToSloy();
                         if (Ex.Count != 0)
                         {
-                            //  ExRasp();
+                            ExRasp();
+                            printResult();
                         }
                     }
                 }
@@ -380,7 +390,6 @@ namespace SystAnalys_lr1
                     max = loc;
                     index = i;
                 }
-
             }
             for (int j = 0; j < V.Count; j++)
             {
@@ -480,17 +489,12 @@ namespace SystAnalys_lr1
             {
                 RToSloy();
             }
-            else
-            {
-                printResult();
-            }
         }
 
         private void ExRasp()
         {
             if (Ex.Count != 0)
             {
-                int p = 0;
                 int sloy = 0;
                 int v = SourseP((Ex.First() - 1));
                 int[] verP = new int[v];
@@ -503,22 +507,37 @@ namespace SystAnalys_lr1
                     }
                 }
                 int[] masP = new int[Convert.ToInt32(LockS.Value)];
-                for (int j = 0; j < Ex.Count; j++)
+                while (sloy < LockS.Value)
                 {
-                    while (sloy < LockS.Value)
+                    int p = 0;
+                    for (int i = 0; i < verP.Length; i++)
                     {
-                        for (int i = 0; i < verP.Length; i++)
+                        if (Dic.Keys.Contains(verP[i]))
                         {
                             if (Dic[verP[i]] == sloy)
                             {
                                 p++;
                             }
                         }
-                        masP[sloy] = p;
-                        sloy++;
                     }
-                    Array.Sort(masP);
-                    Dic.Add(Ex[j], masP.First());
+                    masP[sloy] = p;
+                    sloy++;
+                }
+                int mini = masP.Min();
+                int index = 0;
+                for (int k = 0; k < masP.Length; k++)
+                {
+                    if (masP.Contains(mini))
+                    {
+                        index = k;
+                        break;
+                    }
+                }
+                Dic.Add(Ex.First(), index);
+                Ex.Remove(Ex.First());
+                if (Ex.Count != 0)
+                {
+                    ExRasp();
                 }
             }
         }
@@ -548,21 +567,10 @@ namespace SystAnalys_lr1
                         sOut += mas[j] + " ";
                     }
                 }
-                if (k == 1)
-                {
-                    sOut += " 11";
-                }
-                if (k == 3)
-                {
-                    sOut += " 9";
-                }
                 listBoxMatrix.Items.Add(sOut);
                 k++;
                 sOut = " ";
             }
-            listBoxMatrix.Items.Add("Информация о пересечениях:");
-            listBoxMatrix.Items.Add("В списке S1: 1 пересечение");
-            listBoxMatrix.Items.Add("В списке S3: 1 пересечение");
         }
     }
 }
