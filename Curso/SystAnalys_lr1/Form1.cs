@@ -22,6 +22,7 @@ namespace SystAnalys_lr1
         List<int> Ex = new List<int>(); //список вершин, которые точно имеют пересечения
         Dictionary<int, int> Dic = new Dictionary<int, int>(); //словарь с информацией о вершине и ее слое
         public int n = 0; //текущий слой
+        Dictionary<int, int> pSloys = new Dictionary<int, int>();
 
         int selected1; //выбранные вершины, для соединения линиями
         int selected2;
@@ -298,11 +299,8 @@ namespace SystAnalys_lr1
                 {
                     createAdjAndOut();
                     RToSloy();
-                    if (Ex.Count != 0)
-                    {
-                        ExRasp();
-                        printResult();
-                    }
+                    printResult();
+
                 }
             }
             else
@@ -527,12 +525,13 @@ namespace SystAnalys_lr1
                 int index = 0;
                 for (int k = 0; k < masP.Length; k++)
                 {
-                    if (masP.Contains(mini))
+                    if (masP[k] == mini)
                     {
                         index = k;
                         break;
                     }
                 }
+                pSloys.Add(Ex.First(), mini);
                 Dic.Add(Ex.First(), index);
                 Ex.Remove(Ex.First());
                 if (Ex.Count != 0)
@@ -571,6 +570,13 @@ namespace SystAnalys_lr1
                 k++;
                 sOut = " ";
             }
+            int[] m = new int[pSloys.Count];
+            pSloys.Keys.CopyTo(m, 0);
+            for (int j = 0; j < m.Length; j++)
+            {
+                listBoxMatrix.Items.Add("В слое " + (Dic[m[j]]+1) + " " + pSloys[m[j]] + " пересечений");
+            }
+
         }
     }
 }
