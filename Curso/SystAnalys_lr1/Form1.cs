@@ -290,14 +290,14 @@ namespace SystAnalys_lr1
             L.AddRange(Ex.ToArray());
             L = EMax(matrTest, L); //находим вершины с мак. связями
             if (L.Count == 0)
-            {      //если все вершины исключены, то заканчиваем          
+            {      //если все вершины исключены, то заканчиваем    
+                createAdjAndOut();
                 if (S.Count == 0)
                 {
                     printResult();
                 }
                 else
-                {
-                    createAdjAndOut();
+                {                    
                     RToSloy();
                     printResult();
 
@@ -326,6 +326,7 @@ namespace SystAnalys_lr1
                 //проверка на конец
                 if (CheckMatrZero(AAMatrix) == true || LockS.Value - n <= 0)
                 {
+                    createAdjAndOut();
                     if (S.Count == 0)
                     {
                         if (Ex.Count != 0)
@@ -335,8 +336,7 @@ namespace SystAnalys_lr1
                         printResult();
                     }
                     else
-                    {
-                        createAdjAndOut();
+                    {                        
                         RToSloy();
                         if (Ex.Count != 0)
                         {
@@ -543,9 +543,9 @@ namespace SystAnalys_lr1
 
         private void btnDraw_Click(object sender, EventArgs e)
         {
-            int[,] AAMatrix = new int[V.Count, V.Count];
-            G.fillAdjacencyMatrix(V.Count, E, AAMatrix);
             listBoxMatrix.Items.Clear();
+            int[,] AAMatrix = new int[V.Count, V.Count];
+            G.fillAdjacencyMatrix(V.Count, E, AAMatrix);            
             ExeptVLockMin(AAMatrix, n);
         }
 
@@ -572,9 +572,13 @@ namespace SystAnalys_lr1
             }
             int[] m = new int[pSloys.Count];
             pSloys.Keys.CopyTo(m, 0);
+            Array.Sort(m);
+            listBoxMatrix.Items.Add("Информация о пересечениях: ");
             for (int j = 0; j < m.Length; j++)
             {
-                listBoxMatrix.Items.Add("В слое " + (Dic[m[j]]+1) + " " + pSloys[m[j]] + " пересечений");
+                //listBoxMatrix.Items.Add(" ");
+                listBoxMatrix.Items.Add("Слой " + (Dic[m[j]]+1));
+                listBoxMatrix.Items.Add("Вершина: " + (m[j]));
             }
 
         }
