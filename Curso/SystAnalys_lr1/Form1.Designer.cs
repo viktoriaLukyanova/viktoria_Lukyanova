@@ -69,7 +69,8 @@
             this.menuStrip1.Name = "menuStrip1";
             this.menuStrip1.Size = new System.Drawing.Size(969, 24);
             this.menuStrip1.TabIndex = 12;
-            this.menuStrip1.Text = "menuStrip1";            // 
+            this.menuStrip1.Text = "menuStrip1";
+            // 
             // about
             // 
             this.about.Alignment = System.Windows.Forms.ToolStripItemAlignment.Right;
@@ -236,6 +237,7 @@
             this.MainMenuStrip = this.menuStrip1;
             this.Name = "Form1";
             this.Text = "Алгоритм расслоения МПП";
+            this.Load += new System.EventHandler(this.Form1_Load);
             this.menuStrip1.ResumeLayout(false);
             this.menuStrip1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.sheet)).EndInit();

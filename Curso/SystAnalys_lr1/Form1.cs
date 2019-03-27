@@ -278,77 +278,92 @@ namespace SystAnalys_lr1
                     log = false;
                 }
             }
-            int[,] matrTest = new int[V.Count, V.Count];
-            for (int i = 0; i < V.Count; i++)
+            if (CheckMatrZero(AAMatrix) == true)
             {
-                for (int j = 0; j < V.Count; j++)
-                {
-                    matrTest[i, j] = AAMatrix[i, j];
-                }
-            }
-            List<int> L = new List<int>();
-            L.AddRange(Ex.ToArray());
-            L = EMax(matrTest, L); //находим вершины с мак. связями
-            if (L.Count == 0)
-            {      //если все вершины исключены, то заканчиваем    
                 createAdjAndOut();
-                if (S.Count == 0)
+                Dic.Add(Ex.First(), n);
+                if (S.Count != 0)
                 {
-                    printResult();
-                }
-                else
-                {                    
                     RToSloy();
-                    printResult();
-
                 }
+                printResult();
             }
             else
             {
-                //тоже исключаем их и формируем слои
+                int[,] matrTest = new int[V.Count, V.Count];
                 for (int i = 0; i < V.Count; i++)
                 {
                     for (int j = 0; j < V.Count; j++)
                     {
-                        if (L.Contains(i + 1))
-                        {
-                            AAMatrix[i, j] = 0;
-                            AAMatrix[j, i] = 0;
-                        }
+                        matrTest[i, j] = AAMatrix[i, j];
                     }
                 }
-                for (int i = 0; i < L.Count; i++)
-                {
-                    Dic.Add(L[i], n);
-                    Ex.Remove(L[i]);
-                }
-                n++;
-                //проверка на конец
-                if (CheckMatrZero(AAMatrix) == true || LockS.Value - n <= 0)
-                {
+
+                List<int> L = new List<int>();
+                L.AddRange(Ex.ToArray());
+                L = EMax(matrTest, L); //находим вершины с мак. связями
+                if (L.Count == 0)
+                {      //если все вершины исключены, то заканчиваем    
                     createAdjAndOut();
                     if (S.Count == 0)
                     {
-                        if (Ex.Count != 0)
-                        {
-                            ExRasp();
-                        }
                         printResult();
                     }
                     else
-                    {                        
+                    {
                         RToSloy();
-                        if (Ex.Count != 0)
-                        {
-                            ExRasp();
-                            printResult();
-                        }
+                        printResult();
+
                     }
                 }
                 else
                 {
-                    ExeptVLockMin(AAMatrix, n);
+                    //тоже исключаем их и формируем слои
+                    for (int i = 0; i < V.Count; i++)
+                    {
+                        for (int j = 0; j < V.Count; j++)
+                        {
+                            if (L.Contains(i + 1))
+                            {
+                                AAMatrix[i, j] = 0;
+                                AAMatrix[j, i] = 0;
+                            }
+                        }
+                    }
+                    for (int i = 0; i < L.Count; i++)
+                    {
+                        Dic.Add(L[i], n);
+                        Ex.Remove(L[i]);
+                    }
+                    n++;
+                    //проверка на конец
+                    if (CheckMatrZero(AAMatrix) == true || LockS.Value - n <= 0)
+                    {
+                        createAdjAndOut();
+                        if (S.Count == 0)
+                        {
+                            if (Ex.Count != 0)
+                            {
+                                ExRasp();
+                            }
+                            printResult();
+                        }
+                        else
+                        {
+                            RToSloy();
+                            if (Ex.Count != 0)
+                            {
+                                ExRasp();
+                                printResult();
+                            }
+                        }
+                    }
+                    else
+                    {
+                        ExeptVLockMin(AAMatrix, n);
+                    }
                 }
+
 
             }
         }
@@ -370,7 +385,6 @@ namespace SystAnalys_lr1
             int index = 0;
             for (int i = 0; i < V.Count; i++)
             {
-
                 int loc = 0;
                 if (L.Contains(i + 1))
                 {
@@ -545,7 +559,7 @@ namespace SystAnalys_lr1
         {
             listBoxMatrix.Items.Clear();
             int[,] AAMatrix = new int[V.Count, V.Count];
-            G.fillAdjacencyMatrix(V.Count, E, AAMatrix);            
+            G.fillAdjacencyMatrix(V.Count, E, AAMatrix);
             ExeptVLockMin(AAMatrix, n);
         }
 
@@ -570,16 +584,24 @@ namespace SystAnalys_lr1
                 k++;
                 sOut = " ";
             }
-            int[] m = new int[pSloys.Count];
-            pSloys.Keys.CopyTo(m, 0);
-            Array.Sort(m);
-            listBoxMatrix.Items.Add("Информация о пересечениях: ");
-            for (int j = 0; j < m.Length; j++)
-            {
-                //listBoxMatrix.Items.Add(" ");
-                listBoxMatrix.Items.Add("Слой " + (Dic[m[j]]+1));
-                listBoxMatrix.Items.Add("Вершина: " + (m[j]));
+            if (pSloys.Count != 0)
+            { 
+                int[] m = new int[pSloys.Count];
+                pSloys.Keys.CopyTo(m, 0);
+                Array.Sort(m);
+                listBoxMatrix.Items.Add("Информация о пересечениях: ");
+                for (int j = 0; j < m.Length; j++)
+                {
+                    //listBoxMatrix.Items.Add(" ");
+                    listBoxMatrix.Items.Add("Слой " + (Dic[m[j]] + 1));
+                    listBoxMatrix.Items.Add("Вершина: " + (m[j]));
+                }
             }
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
 
         }
     }
