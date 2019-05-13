@@ -18,9 +18,12 @@ namespace SystAnalys_lr1
         List<Edge> E;
 
         float[,] AMatrix; //матрица смежности
-
+        bool isClick = false;
         int selected1; //выбранные вершины, для соединения линиями
         int selected2;
+        int numberV=-1;
+        int delX = 0;
+        int delY = 0; 
 
         public Form1()
         {
@@ -38,8 +41,8 @@ namespace SystAnalys_lr1
             drawVertexButton.Enabled = true;
             drawEdgeButton.Enabled = true;
             deleteButton.Enabled = true;
-           // G.clearSheet();
-           // G.drawALLGraph(V, E);
+            // G.clearSheet();
+            // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
             selected1 = -1;
 
@@ -52,8 +55,8 @@ namespace SystAnalys_lr1
             selectButton.Enabled = true;
             drawEdgeButton.Enabled = true;
             deleteButton.Enabled = true;
-           // G.clearSheet();
-           // G.drawALLGraph(V, E);
+            // G.clearSheet();
+            // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
         }
 
@@ -64,8 +67,8 @@ namespace SystAnalys_lr1
             selectButton.Enabled = true;
             drawVertexButton.Enabled = true;
             deleteButton.Enabled = true;
-           // G.clearSheet();
-           // G.drawALLGraph(V, E);
+            // G.clearSheet();
+            // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
             selected1 = -1;
             selected2 = -1;
@@ -78,8 +81,8 @@ namespace SystAnalys_lr1
             selectButton.Enabled = true;
             drawVertexButton.Enabled = true;
             drawEdgeButton.Enabled = true;
-           // G.clearSheet();
-           // G.drawALLGraph(V, E);
+            // G.clearSheet();
+            // G.drawALLGraph(V, E);
             sheet.Image = G.GetBitmap();
         }
 
@@ -106,37 +109,27 @@ namespace SystAnalys_lr1
         private void buttonAdj_Click(object sender, EventArgs e)
         {
             createAdjAndOut();
-        }        
+        }
 
         private void sheet_MouseClick(object sender, MouseEventArgs e)
         {
             //если нажата кнопка "выбрать вершину", ищем степень вершины
             if (selectButton.Enabled == false)
             {
-                for (int i = 0; i < V.Count; i++)
+               /* for (int i = 0; i < V.Count; i++)
                 {
                     if (Math.Pow((V[i].x - e.X), 2) + Math.Pow((V[i].y - e.Y), 2) <= G.R * G.R)
                     {
-                        if (selected1 != -1)
+                        if (isClick)
                         {
-                            selected1 = -1;
-                           // G.clearSheet();
-                           // G.drawALLGraph(V, E);
+                            G.drawVertex(e.X, e.Y, V[i].ToString());
                             sheet.Image = G.GetBitmap();
+                            //V[i].x = e.X - V[i].x;
+                            // V[i].y = e.Y - V[i].y;
                         }
-                        if (selected1 == -1)
-                        {
-                            G.drawSelectedVertex(V[i].x, V[i].y);
-                            selected1 = i;
-                            sheet.Image = G.GetBitmap();
-                            createAdjAndOut();
-                            float degree = 0;
-                            for (int j = 0; j < V.Count; j++)
-                                degree += AMatrix[selected1, j];
-                            break;
-                        }
+
                     }
-                }
+                }*/
             }
             // если нажата кнопка "рисовать вершину"
             if (drawVertexButton.Enabled == false)
@@ -208,7 +201,7 @@ namespace SystAnalys_lr1
                                 if (E[j].v2 > i) E[j].v2--;
                             }
                         }
-                        V.RemoveAt(i);                        
+                        V.RemoveAt(i);
                         flag = true;
                         break;
                     }
@@ -282,18 +275,18 @@ namespace SystAnalys_lr1
                 ch = 0;
                 for (int j = 0; j < V.Count; j++)
                 {
-                    
+
                     tableEnter[j, i].Value = AMatrix[i, j];
-                    ch += AMatrix[i, j];                    
+                    ch += AMatrix[i, j];
                 }
                 if (ch > 1)
                 {
                     tableEnter.Rows[i].DefaultCellStyle.BackColor = Color.Yellow;
                     MessageBox.Show("Ошибка в строке");
                 }
-                
+
             }
-        }               
+        }
 
         //О программе
         private void about_Click(object sender, EventArgs e)
@@ -327,5 +320,37 @@ namespace SystAnalys_lr1
             }
         }
 
+        private void sheet_MouseDown(object sender, MouseEventArgs e)
+        {
+            for (int i = 0; i < V.Count; i++)
+            {
+                if (Math.Pow((V[i].x - e.X), 2) + Math.Pow((V[i].y - e.Y), 2) <= G.R * G.R)
+                {
+                    isClick = true;
+                    delX = e.X - V[i].x;
+                    delY = e.Y - V[i].y;
+                    numberV = i;              
+                }
+            }
+        }
+
+        private void sheet_MouseMove(object sender, MouseEventArgs e)
+        {
+            if (isClick)
+            {
+                V[numberV].x = e.X - delX;
+                V[numberV].y = e.Y - delY;
+                G.clearOne();
+                G.drawVertex(V[numberV].x, V[numberV].y, (numberV+1).ToString());
+                G.drawALLGraph(V, E);
+                sheet.Image = G.GetBitmap();
+            }
+        }
+
+        private void sheet_MouseUp(object sender, MouseEventArgs e)
+        {           
+            isClick = false;
+            numberV = -1;
+        }
     }
 }
